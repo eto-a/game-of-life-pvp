@@ -18,9 +18,6 @@ npm i
 # Запуск фронтенда
 npm run dev
 # http://localhost:5173
-
-# Или полный стек через Docker Compose
-make run
 ```````
 
 ## Структура проекта
