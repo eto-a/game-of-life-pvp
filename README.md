@@ -23,21 +23,38 @@ npm run dev
 make run
 ```````
 
-## 📂 Структура проекта
-
-```bash
-frontend/
-  src/
-    app/        # store, router, layout
-    pages/      # страницы приложения
-    shared/     # api, ui-компоненты
-    workers/    # симуляция клеток
-backend/
-  src/
-    modules/    # auth, rating, match, user
-    ws/         # websocket gateway
-    routes/     # REST endpoints
-docker-compose.yml
+## Структура проекта
 
 
-```````
+```
+d:/Projects/React/game-of-life-pvp
+├─ public/
+│  └─ index.html
+├─ src/
+│  ├─ index.css
+│  ├─ main.jsx
+│  ├─ app/
+│  │  ├─ store.js
+│  │  ├─ router.jsx
+│  │  └─ layout/
+│  │     ├─ Navbar.jsx
+│  │     └─ RootLayout.jsx
+│  ├─ shared/
+│  │  ├─ api/
+│  │  │  └─ baseApi.js
+│  │  └─ ui/
+│  │     └─ Container.jsx
+│  ├─ pages/
+│  │  ├─ Landing.jsx
+│  │  ├─ Auth.jsx
+│  │  ├─ Lobby.jsx
+│  │  ├─ Arena.jsx
+│  │  ├─ Results.jsx
+│  │  ├─ Leaderboard.jsx
+│  │  ├─ Profile.jsx
+│  │  └─ NotFound.jsx
+│  └─ workers/
+│     └─ simulation.worker.js
+├─ package.json
+└─ README.md
+```
