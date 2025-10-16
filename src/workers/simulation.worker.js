@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+
 let W = 0, H = 0;
 let grid;
 
