@@ -27,7 +27,7 @@ make run
 
 
 ```
-d:/Projects/React/game-of-life-pvp
+    game-of-life-pvp
 ├─ public/
 │  └─ index.html
 ├─ src/
