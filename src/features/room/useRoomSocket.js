@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setConnection, setPlayers, setReadyMap, setMatchId, setWsError, setRoomCode,
 } from "./room.slice";
-import { getSocket, connectWithAuth, connectToRoom } from "../../shared/ws/socket";
+import { connectWithAuth, connectToRoom } from "../../shared/ws/socket";
 
 /**
  * Делает join в комнату, следит за переподключениями и
@@ -14,7 +14,7 @@ export function useRoomSocket(roomCode) {
   const jwt = useSelector((s) => s.auth?.jwt);
 
   // уникальный идентификатор "партии" этого эффекта, чтобы обойти StrictMode double-invoke
-  const joinIdRef = useRef(0);
+  const joinIdRef = useRef({ token: null });
   const currentRoomRef = useRef(null);
 
   useEffect(() => {
@@ -40,7 +40,8 @@ export function useRoomSocket(roomCode) {
     };
 
     // новый join-id для этого запуска эффекта
-    const myJoinId = ++joinIdRef.current;
+    const joinToken = Symbol("join");
+    joinIdRef.current = { token: joinToken };
 
     // ---- системные события
     const onConnect = () => {
@@ -60,7 +61,7 @@ export function useRoomSocket(roomCode) {
     s.on("connect_error", onConnectError);
 
     // ---- room events
-    const onJoined = () => {};
+    const onJoined = () => undefined;
     const onPresence = (p) => dispatch(setPlayers(p?.players || []));
     const onReady    = (p) => dispatch(setReadyMap(p?.readyMap || {}));
     const onStart    = (p) => dispatch(setMatchId(p?.matchId || null));
@@ -77,7 +78,11 @@ export function useRoomSocket(roomCode) {
       dispatch(setConnection("connected"));
       doJoin();
     } else {
-      try { s.connect?.(); } catch {}
+      try {
+        s.connect?.();
+      } catch (err) {
+        console.error("[ws] connect failed", err);
+      }
       dispatch(setConnection("connecting"));
     }
 
@@ -85,7 +90,11 @@ export function useRoomSocket(roomCode) {
     const leaveOnUnload = () => {
       const code = currentRoomRef.current;
       if (!code) return;
-      try { s.emit("leave_room", { roomCode: code }); } catch {}
+      try {
+        s.emit("leave_room", { roomCode: code });
+      } catch (err) {
+        console.error("[ws] leave_room emit failed", err);
+      }
       // NB: socket.io client сам разорвет соединение при closeOnBeforeunload:true
     };
     // pagehide лучше чем beforeunload в моб. браузерах
@@ -111,10 +120,14 @@ export function useRoomSocket(roomCode) {
 
       // ВАЖНО: шлём leave_room ТОЛЬКО если это всё ещё актуальный join этого эффекта
       // (иначе StrictMode вызовет двойной cleanup и ты случайно выйдешь из комнаты повторно)
-      if (joinIdRef.current === myJoinId) {
+      if (joinIdRef.current?.token === joinToken) {
         const code = currentRoomRef.current;
         if (code) {
-          try { s.emit("leave_room", { roomCode: code }); } catch {}
+          try {
+            s.emit("leave_room", { roomCode: code });
+          } catch (err) {
+            console.error("[ws] leave_room emit failed", err);
+          }
           currentRoomRef.current = null;
         }
       }

@@ -11,7 +11,7 @@ import Leaderboard from '../pages/Leaderboard';
 import Profile from '../pages/Profile';
 import NotFound from '../pages/NotFound';
 
-export function renderWithApp(ui, { route = '/', path = '/' } = {}) {
+export function renderWithApp(ui, { route = '/' } = {}) {
   window.history.pushState({}, 'Test page', route);
 
   return render(

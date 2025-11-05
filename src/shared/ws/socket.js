@@ -34,7 +34,11 @@ export function connectWithAuth(opts = {}) {
   if (opts.closeOnBeforeunload && !unloadBound) {
     unloadBound = true;
     const onUnload = () => {
-      try { s.close(); } catch {}
+      try {
+        s.close();
+      } catch (err) {
+        console.error("[ws] close on unload failed", err);
+      }
     };
     // pagehide в моб. браузерах надёжнее
     window.addEventListener("pagehide", onUnload);
@@ -55,7 +59,11 @@ export function connectWithAuth(opts = {}) {
   }
 
   // если подключены, но токен сменился — мягкий реконинект
-  try { s.disconnect(); } catch {}
+  try {
+    s.disconnect();
+  } catch (err) {
+    console.error("[ws] disconnect before reconnect failed", err);
+  }
   s.connect();
   return s;
 }
@@ -88,7 +96,9 @@ export function leaveRoom(roomCode) {
     try {
       s.emit("leave_room", { roomCode });
       console.debug("[ws] emit leave_room", roomCode);
-    } catch {}
+    } catch (err) {
+      console.error("[ws] leaveRoom emit failed", err);
+    }
   }
 }
 

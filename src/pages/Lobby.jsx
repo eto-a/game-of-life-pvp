@@ -16,7 +16,7 @@ export default function Lobby() {
   const nav = useNavigate();
 
   const jwt = useSelector((s) => s.auth.jwt);
-  const { data: me } = useMeQuery(undefined, { skip: !jwt });
+  useMeQuery(undefined, { skip: !jwt });
 
   const handleQuick = async () => {
     const res = await quickplay().unwrap();

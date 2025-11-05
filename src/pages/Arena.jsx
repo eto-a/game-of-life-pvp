@@ -290,7 +290,6 @@ export default function Arena() {
                 roomCode={roomCode}
                 meta={meta}
                 setMeta={setMeta}
-                started={started}
                 setStarted={setStarted}
                 building={building}
                 setBuilding={setBuilding}
@@ -378,7 +377,7 @@ export default function Arena() {
 }
 
 /** Canvas + worker: build-phase локально, resume через replay */
-function GameCanvas({ roomCode, meta, setMeta, started, setStarted, building, setBuilding }) {
+function GameCanvas({ roomCode, meta, setMeta, setStarted, building, setBuilding }) {
   const canvasRef = useRef(null);
   const workerRef = useRef(null);
   const snapshotRef = useRef({ w: meta.width, h: meta.height, buf: null });
@@ -421,8 +420,16 @@ function GameCanvas({ roomCode, meta, setMeta, started, setStarted, building, se
     drawCanvas(canvasRef.current, snapshotRef.current, meta);
 
     return () => {
-      try { delete window.__arena_exportCells; } catch {}
-      try { delete window.__arena_lastSnapshot; } catch {}
+      try {
+        delete window.__arena_exportCells;
+      } catch (err) {
+        console.error("[arena] failed to clean exportCells", err);
+      }
+      try {
+        delete window.__arena_lastSnapshot;
+      } catch (err) {
+        console.error("[arena] failed to clean lastSnapshot", err);
+      }
       w.terminate();
       workerRef.current = null;
     };

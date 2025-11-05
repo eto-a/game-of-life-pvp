@@ -1,5 +1,4 @@
 // gol.worker.js
-/* eslint-disable no-restricted-globals */
 
 let W = 64, H = 48;
 let grid = new Uint8Array(W * H);     // 0/1
