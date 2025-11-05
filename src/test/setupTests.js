@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 
 // MSW — оставим заготовку, но по умолчанию не поднимаем,
 // так как большинство хуков мы замокаем через vi.mock.
