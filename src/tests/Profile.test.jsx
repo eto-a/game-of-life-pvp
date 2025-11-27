@@ -10,7 +10,6 @@ let isUpdateLoading = false;
 const refetchMock = vi.fn();
 const unwrapMock = vi.fn();
 const updateMock = vi.fn(() => ({ unwrap: unwrapMock }));
-const meResult = { data: undefined, isLoading: false, refetch: refetchMock };
 const profileWrapper = { profile: profileData };
 
 vi.mock('../features/profile/profile.api.js', () => ({
