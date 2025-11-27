@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { trackMetrikaGoal } from "../shared/analytics/metrika";
 
 export default function Landing() {
   const canvasRef = useRef(null);
@@ -63,13 +64,13 @@ export default function Landing() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link to="/lobby" className="btn btn-primary">
+            <Link to="/lobby" className="btn btn-primary" onClick={() => trackMetrikaGoal("lobby_click")}>
               Играть сейчас
             </Link>
-            <Link to="/auth" className="btn btn-outline">
+            <Link to="/auth" className="btn btn-outline" onClick={() => trackMetrikaGoal("login_click")}>
               Войти
             </Link>
-            <Link to="/lobby?new=true" className="btn btn-outline">
+            <Link to="/lobby?new=true" className="btn btn-outline" onClick={() => trackMetrikaGoal("lobby_click")}>
               Создать комнату
             </Link>
           </div>
