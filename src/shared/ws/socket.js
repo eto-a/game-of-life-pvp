@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import * as Sentry from "@sentry/react";
 import { store } from "../../app/store";
 
 export const WS_URL = import.meta.env.VITE_WS_URL || "http://localhost:1337";
@@ -38,6 +39,7 @@ export function connectWithAuth(opts = {}) {
         s.close();
       } catch (err) {
         console.error("[ws] close on unload failed", err);
+        Sentry.captureException(err, { extra: { ctx: "ws.close_on_unload" } });
       }
     };
     // pagehide в моб. браузерах надёжнее
@@ -63,6 +65,7 @@ export function connectWithAuth(opts = {}) {
     s.disconnect();
   } catch (err) {
     console.error("[ws] disconnect before reconnect failed", err);
+    Sentry.captureException(err, { extra: { ctx: "ws.disconnect_before_reconnect" } });
   }
   s.connect();
   return s;
@@ -98,6 +101,7 @@ export function leaveRoom(roomCode) {
       console.debug("[ws] emit leave_room", roomCode);
     } catch (err) {
       console.error("[ws] leaveRoom emit failed", err);
+      Sentry.captureException(err, { extra: { ctx: "ws.leave_room", roomCode } });
     }
   }
 }
