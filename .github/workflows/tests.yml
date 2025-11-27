@@ -15,5 +15,9 @@ jobs:
           node-version: 22.x
           cache: npm
       - run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
       - name: Unit tests (coverage >= 80%)
         run: npm run coverage
+      - name: E2E tests
+        run: npm run test:e2e

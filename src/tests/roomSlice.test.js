@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { vi } from 'vitest';
 import roomReducer, {
   setRoomCode,
   setConnection,
