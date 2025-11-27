@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import * as Sentry from '@sentry/react';
 import { API_URL } from '../config/api';
 import { clearAuth } from '../../features/auth/auth.slice';
 
@@ -12,11 +13,23 @@ const rawBase = fetchBaseQuery({
 });
 
 const baseQuery = async (args, api, extraOptions) => {
-  const res = await rawBase(args, api, extraOptions);
-  if (res.error && res.error.status === 401) {
-    api.dispatch(clearAuth());
+  try {
+    const res = await rawBase(args, api, extraOptions);
+    if (res.error) {
+      if (res.error.status === 401) {
+        api.dispatch(clearAuth());
+      } else if (res.error.status >= 500) {
+        Sentry.captureMessage('api_error', {
+          level: 'error',
+          extra: { args, status: res.error.status, data: res.error.data },
+        });
+      }
+    }
+    return res;
+  } catch (err) {
+    Sentry.captureException(err, { extra: { args } });
+    throw err;
   }
-  return res;
 };
 
 export const api = createApi({
