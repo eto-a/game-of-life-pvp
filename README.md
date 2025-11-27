@@ -20,6 +20,13 @@ npm run dev
 # http://localhost:5173
 ```````
 
+## e2e тесты
+
+```bash
+npx playwright install
+npm run test:e2e
+```
+
 ## Структура проекта
 
 

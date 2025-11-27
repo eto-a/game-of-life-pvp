@@ -1,13 +1,33 @@
+import { Link, useParams } from "react-router-dom";
+
 export default function Results() {
+  const { matchId } = useParams();
+
   return (
-    <div className="space-y-3">
-      <h2 className="text-xl font-semibold">Results</h2>
-      <div className="border rounded p-3">Score & Rating delta (todo)</div>
-      <div className="flex gap-2">
-        <a href="/lobby" className="px-3 py-2 border rounded">Play Again</a>
-        <a href="/leaderboard" className="px-3 py-2 border rounded">Leaderboard</a>
-      </div>
-    </div>
+    <main className="min-h-screen bg-white text-[var(--color-ink)]">
+      <section className="py-16 md:py-20">
+        <div className="container text-center">
+          <h1>Итоги матча</h1>
+          <p className="muted mt-1">Матч #{matchId}</p>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <div className="card p-4">
+              <div className="font-semibold">Игрок A</div>
+              <p className="muted text-sm mt-1">Очки: 16 • Δ Elo +12</p>
+            </div>
+            <div className="card p-4">
+              <div className="font-semibold">Игрок B</div>
+              <p className="muted text-sm mt-1">Очки: 11 • Δ Elo -12</p>
+            </div>
+          </div>
+
+          <div className="mt-10 flex items-center justify-center gap-3">
+            <Link to="/lobby" className="btn btn-primary">Новая игра</Link>
+            <Link to="/leaderboard" className="btn btn-outline">Лидеры</Link>
+            <Link to="/profile" className="btn btn-outline">Мой профиль</Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
-
