@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearAuth } from "../../features/auth/auth.slice";
+import { trackMetrikaGoal } from "../../shared/analytics/metrika";
 
 export default function Navbar() {
   const { jwt, user } = useSelector((s) => s.auth);
@@ -27,7 +28,7 @@ export default function Navbar() {
 
         {/* Навигация */}
         <nav className="hidden md:flex items-center gap-1 text-sm">
-          <NavLink to="/lobby" className={getClass}>
+          <NavLink to="/lobby" className={getClass} onClick={() => trackMetrikaGoal("lobby_click")}>
             Лобби
           </NavLink>
           <NavLink to="/leaderboard" className={getClass}>
@@ -43,7 +44,7 @@ export default function Navbar() {
         {/* Правая часть */}
         <div className="flex items-center gap-2">
           {!jwt ? (
-            <Link to="/auth" className="btn btn-primary text-sm">
+            <Link to="/auth" className="btn btn-primary text-sm" onClick={() => trackMetrikaGoal("login_click")}>
               Войти
             </Link>
           ) : (
